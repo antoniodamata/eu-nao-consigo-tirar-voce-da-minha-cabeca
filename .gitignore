@@ -19,6 +19,7 @@ DerivedData/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 *.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
 
 # =========================
 # Logs
@@ -43,3 +44,7 @@ DerivedData/
 data/sessions/
 data/logs/
 
+# Xcode user data
+*.xcuserdata/
+
+app/SensorApp/SensorApp.xcodeproj/xcuserdata/
