@@ -48,3 +48,26 @@ data/logs/
 *.xcuserdata/
 
 app/SensorApp/SensorApp.xcodeproj/xcuserdata/
+
+# =========================
+# Segredos
+# =========================
+.env
+*.env
+!.env.example
+
+# =========================
+# Ambientes virtuais
+# =========================
+venv/
+server/venv/
+
+# =========================
+# Versão antiga do projeto (mantida em disco, fora do git)
+# =========================
+sensor_llm/
+
+# =========================
+# Arquivos de teste
+# =========================
+teste1.pdf

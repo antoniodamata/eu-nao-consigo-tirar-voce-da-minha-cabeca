@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		016CAD75300930F400B597E4 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD74300930E600B597E4 /* LocationManager.swift */; };
+		016CAD793009339400B597E4 /* MagnetometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD783009338A00B597E4 /* MagnetometerManager.swift */; };
+		016CAD7C3009368900B597E4 /* BarometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD7B3009368400B597E4 /* BarometerManager.swift */; };
+		016CAD803009376000B597E4 /* ProximityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD7F3009375D00B597E4 /* ProximityManager.swift */; };
+		016CAD83300937CC00B597E4 /* BatteryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD82300937C200B597E4 /* BatteryManager.swift */; };
+		016CAD853009389600B597E4 /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD843009389300B597E4 /* OrientationManager.swift */; };
+		016CAD873009397F00B597E4 /* BrightnessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD863009397C00B597E4 /* BrightnessManager.swift */; };
+		016CAD89300939D300B597E4 /* VolumeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD88300939D100B597E4 /* VolumeManager.swift */; };
+		016CAD8B30093A1B00B597E4 /* MicrophoneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD8A30093A0B00B597E4 /* MicrophoneManager.swift */; };
+		016CAD8D30093ACE00B597E4 /* HeadphonesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD8C30093AC400B597E4 /* HeadphonesManager.swift */; };
+		016CAD8F30093E9D00B597E4 /* DeviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD8E30093E9A00B597E4 /* DeviceState.swift */; };
 		019EB6702FFE94EA00F3FC86 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DF93332FFE819500CF695A /* MotionManager.swift */; };
 		019EB6712FFE9AFE00F3FC86 /* SensorData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DF93342FFE820600CF695A /* SensorData.swift */; };
 		019EB6732FFE9F0600F3FC86 /* SensorHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019EB6722FFE9C6C00F3FC86 /* SensorHub.swift */; };
@@ -15,6 +26,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		016CAD74300930E600B597E4 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		016CAD783009338A00B597E4 /* MagnetometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerManager.swift; sourceTree = "<group>"; };
+		016CAD7B3009368400B597E4 /* BarometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarometerManager.swift; sourceTree = "<group>"; };
+		016CAD7F3009375D00B597E4 /* ProximityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityManager.swift; sourceTree = "<group>"; };
+		016CAD82300937C200B597E4 /* BatteryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryManager.swift; sourceTree = "<group>"; };
+		016CAD843009389300B597E4 /* OrientationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
+		016CAD863009397C00B597E4 /* BrightnessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessManager.swift; sourceTree = "<group>"; };
+		016CAD88300939D100B597E4 /* VolumeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeManager.swift; sourceTree = "<group>"; };
+		016CAD8A30093A0B00B597E4 /* MicrophoneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneManager.swift; sourceTree = "<group>"; };
+		016CAD8C30093AC400B597E4 /* HeadphonesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadphonesManager.swift; sourceTree = "<group>"; };
+		016CAD8E30093E9A00B597E4 /* DeviceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceState.swift; sourceTree = "<group>"; };
 		019EB6722FFE9C6C00F3FC86 /* SensorHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorHub.swift; sourceTree = "<group>"; };
 		01DF93142FFDFFD600CF695A /* SensorApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SensorApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01DF93292FFE003800CF695A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -23,9 +45,22 @@
 		01DF93362FFE822A00CF695A /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		016CAD77300931D800B597E4 /* Exceptions for "SensorApp" folder in "SensorApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 01DF93132FFDFFD600CF695A /* SensorApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		01DF93162FFDFFD600CF695A /* SensorApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				016CAD77300931D800B597E4 /* Exceptions for "SensorApp" folder in "SensorApp" target */,
+			);
 			path = SensorApp;
 			sourceTree = "<group>";
 		};
@@ -75,7 +110,17 @@
 			isa = PBXGroup;
 			children = (
 				01DF93332FFE819500CF695A /* MotionManager.swift */,
+				016CAD783009338A00B597E4 /* MagnetometerManager.swift */,
 				019EB6722FFE9C6C00F3FC86 /* SensorHub.swift */,
+				016CAD74300930E600B597E4 /* LocationManager.swift */,
+				016CAD7B3009368400B597E4 /* BarometerManager.swift */,
+				016CAD7F3009375D00B597E4 /* ProximityManager.swift */,
+				016CAD82300937C200B597E4 /* BatteryManager.swift */,
+				016CAD843009389300B597E4 /* OrientationManager.swift */,
+				016CAD863009397C00B597E4 /* BrightnessManager.swift */,
+				016CAD88300939D100B597E4 /* VolumeManager.swift */,
+				016CAD8A30093A0B00B597E4 /* MicrophoneManager.swift */,
+				016CAD8C30093AC400B597E4 /* HeadphonesManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -92,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				01DF93342FFE820600CF695A /* SensorData.swift */,
+				016CAD8E30093E9A00B597E4 /* DeviceState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -179,9 +225,20 @@
 			files = (
 				01DF932C2FFE003800CF695A /* ContentView.swift in Sources */,
 				019EB6702FFE94EA00F3FC86 /* MotionManager.swift in Sources */,
+				016CAD853009389600B597E4 /* OrientationManager.swift in Sources */,
 				019EB6712FFE9AFE00F3FC86 /* SensorData.swift in Sources */,
+				016CAD75300930F400B597E4 /* LocationManager.swift in Sources */,
 				019EB6732FFE9F0600F3FC86 /* SensorHub.swift in Sources */,
 				019EB6742FFEA16400F3FC86 /* WebSocketManager.swift in Sources */,
+				016CAD89300939D300B597E4 /* VolumeManager.swift in Sources */,
+				016CAD83300937CC00B597E4 /* BatteryManager.swift in Sources */,
+				016CAD7C3009368900B597E4 /* BarometerManager.swift in Sources */,
+				016CAD873009397F00B597E4 /* BrightnessManager.swift in Sources */,
+				016CAD8F30093E9D00B597E4 /* DeviceState.swift in Sources */,
+				016CAD803009376000B597E4 /* ProximityManager.swift in Sources */,
+				016CAD8D30093ACE00B597E4 /* HeadphonesManager.swift in Sources */,
+				016CAD793009339400B597E4 /* MagnetometerManager.swift in Sources */,
+				016CAD8B30093A1B00B597E4 /* MicrophoneManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +376,11 @@
 				DEVELOPMENT_TEAM = 4M2LU2YSYQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SensorApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "O aplicativo utiliza sua localização para experimentos de percepção e sensores.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "O aplicativo utiliza o microfone para medir o nível de áudio ambiente como parte da leitura dos sensores.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "O aplicativo utiliza os sensores de movimento para capturar dados do dispositivo.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -352,6 +414,11 @@
 				DEVELOPMENT_TEAM = 4M2LU2YSYQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SensorApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "O aplicativo utiliza sua localização para experimentos de percepção e sensores.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "O aplicativo utiliza o microfone para medir o nível de áudio ambiente como parte da leitura dos sensores.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "O aplicativo utiliza os sensores de movimento para capturar dados do dispositivo.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

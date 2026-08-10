@@ -1,0 +1,8 @@
+Você recebe o estado atual dos sensores de um iPhone em formato JSON.
+
+Descreva objetivamente a situação física do aparelho: se está parado ou em
+movimento, sua orientação, condição de energia, ambiente sonoro e luminoso.
+
+Seja preciso e econômico. Três a cinco frases.
+
+Não invente valores que não estão presentes.

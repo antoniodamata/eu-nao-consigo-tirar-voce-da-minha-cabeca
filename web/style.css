@@ -1,0 +1,156 @@
+:root {
+    --fundo: #ffffff;
+    --texto: #111111;
+    --apagado: #8a8a8a;
+    --tenue: #b8b8b8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.95;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 80px;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 90px 40px 200px;
+}
+
+/* ---------------------------------------------------------- texto */
+
+#coluna {
+    min-width: 0;
+}
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+    margin-bottom: 12px;
+    margin-left: 76px;
+    max-width: 400px;
+}
+
+#registro {
+    font-size: 11px;
+    color: var(--tenue);
+    margin-left: 76px;
+    max-width: 400px;
+    line-height: 1.7;
+    display: none;
+}
+
+.hora {
+    color: var(--tenue);
+    font-variant-numeric: tabular-nums;
+    animation: chegar 3s ease-out;
+}
+
+/* O horário mora numa coluna própria, à esquerda da medida do poema.
+   O título e a legenda recuam para alinhar com os versos, não com as horas. */
+#texto {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 400px);
+    min-width: 0;
+    max-width: 476px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+#texto.vazio {
+    display: block;
+    color: var(--tenue);
+    margin-left: 76px;
+}
+
+.verso {
+    white-space: pre-wrap;
+    animation: chegar 3s ease-out;
+}
+
+@keyframes chegar {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ---------------------------------------------------------- sensores */
+
+#sensores {
+    font-size: 11px;
+    line-height: 1.85;
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+    color: var(--tenue);
+}
+
+.linha {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.rotulo {
+    white-space: nowrap;
+}
+
+.valor {
+    color: var(--apagado);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    transition: color 1.5s ease-out;
+}
+
+.valor.mudou {
+    color: var(--texto);
+    transition: none;
+}
+
+#conexao.offline {
+    color: #c0392b;
+}
+
+/* ---------------------------------------------------------- telas pequenas */
+
+@media (max-width: 760px) {
+
+    main {
+        grid-template-columns: 1fr;
+        gap: 56px;
+        padding: 48px 24px 120px;
+    }
+
+    h1, #registro {
+        margin-left: 62px;
+    }
+
+    #texto {
+        grid-template-columns: 62px minmax(0, 1fr);
+        max-width: none;
+    }
+
+    #texto.vazio {
+        margin-left: 62px;
+    }
+
+    #sensores {
+        position: static;
+        columns: 2;
+        column-gap: 28px;
+    }
+}

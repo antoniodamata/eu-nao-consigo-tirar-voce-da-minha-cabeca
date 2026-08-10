@@ -1,9 +1,18 @@
+import os
+import sys
+from pathlib import Path
+
 import uvicorn
 
+# Os módulos do servidor se importam entre si de forma plana (import state,
+# import config), então a pasta server precisa estar no path.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "server"))
+
 if __name__ == "__main__":
+
     uvicorn.run(
-        "server.main:app",
+        "main:app",
         host="0.0.0.0",
-        port=8000,
+        port=int(os.getenv("PORT", "8000")),
         reload=False
     )
