@@ -23,6 +23,16 @@ const SERVIDOR = "";
 //
 const ARQUIVO = "";
 
+// Qual performance a página repete quando não há ninguém sendo seguido.
+// Vazio = a mais recente. Preenchido = sempre esta, ignorando os testes
+// que vierem depois.
+const SESSAO = "2026-08-10_22h19m35s";
+
+// Fuso da performance, em horas. O servidor roda em UTC, mas o registro
+// tem que mostrar sempre a hora do lugar onde aconteceu — senão quem lê
+// de outro país vê outro horário, e deixa de ser documentação.
+const FUSO_HORAS = -3;
+
 // Quantos versos manter na página antes de descartar os mais antigos.
 const MAX_BLOCOS = 400;
 
@@ -62,15 +72,24 @@ function base(url) {
     return url;
 }
 
+function noFuso(epochOuIso) {
+
+    const ms = typeof epochOuIso === "number"
+        ? epochOuIso * 1000
+        : Date.parse(epochOuIso);
+
+    return new Date(ms + FUSO_HORAS * 3600 * 1000);
+}
+
 function hora(epoch) {
 
     if (!epoch) return "--:--:--";
 
-    const d = new Date(epoch * 1000);
+    const d = noFuso(epoch);
 
     const p = n => String(n).padStart(2, "0");
 
-    return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+    return `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())}`;
 }
 
 function dataPorExtenso(iso) {
@@ -78,14 +97,14 @@ function dataPorExtenso(iso) {
     const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho",
         "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
-    const d = new Date(iso);
+    const d = noFuso(iso);
 
-    return `${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+    return `${d.getUTCDate()} de ${meses[d.getUTCMonth()]} de ${d.getUTCFullYear()}`;
 }
 
 function horaCurta(iso) {
-    const d = new Date(iso);
-    return `${d.getHours()}h${String(d.getMinutes()).padStart(2, "0")}`;
+    const d = noFuso(iso);
+    return `${d.getUTCHours()}h${String(d.getUTCMinutes()).padStart(2, "0")}`;
 }
 
 // ------------------------------------------------------------- formatação
@@ -231,11 +250,20 @@ async function tocarRegistro() {
 
     let gravacao;
 
+    const endereco = ARQUIVO
+        ? ARQUIVO
+        : base(SESSAO ? `/registro/${SESSAO}` : "/registro/ultima");
+
     try {
-        const r = await fetch(ARQUIVO ? ARQUIVO : base("/registro/ultima"));
+        const r = await fetch(endereco);
         gravacao = await r.json();
     } catch {
         anunciar("não foi possível carregar o registro");
+        return;
+    }
+
+    if (gravacao && gravacao.erro) {
+        anunciar("performance não encontrada");
         return;
     }
 
