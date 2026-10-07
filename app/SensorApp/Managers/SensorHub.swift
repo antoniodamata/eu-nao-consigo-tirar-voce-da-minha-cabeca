@@ -32,6 +32,22 @@ final class SensorHub {
             accelerationY: motion.accelerationY,
             accelerationZ: motion.accelerationZ,
 
+            // Postura — já vinha calculada e era descartada aqui
+            pitch: motion.pitch,
+            roll: motion.roll,
+            yaw: motion.yaw,
+
+            // Classificação do próprio sistema
+            activity: ActivityManager.shared.activity,
+            activityConfidence: ActivityManager.shared.confidence,
+
+            // Pedômetro
+            steps: PedometerManager.shared.steps,
+            distance: PedometerManager.shared.distance,
+            floorsAscended: PedometerManager.shared.floorsAscended,
+            floorsDescended: PedometerManager.shared.floorsDescended,
+            cadence: PedometerManager.shared.cadence,
+
             // Localização
             latitude: LocationManager.shared.latitude,
             longitude: LocationManager.shared.longitude,
@@ -65,7 +81,29 @@ final class SensorHub {
             // Áudio
             volume: VolumeManager.shared.volume,
             microphoneLevel: MicrophoneManager.shared.level,
-            headphonesConnected: HeadphonesManager.shared.connected
+            voiceRatio: MicrophoneManager.shared.voiceRatio,
+            speech: MicrophoneManager.shared.speech,
+            headphonesConnected: HeadphonesManager.shared.connected,
+
+            // Cabeça
+            headAvailable: HeadphoneMotionManager.shared.headAvailable,
+            headPitch: HeadphoneMotionManager.shared.headPitch,
+            headYaw: HeadphoneMotionManager.shared.headYaw,
+
+            // Paradas
+            visitState: VisitManager.shared.visitState,
+            minutesHere: VisitManager.shared.minutesHere,
+            visitCount: VisitManager.shared.visitCount,
+
+            // Ambiente
+            thermalState: EnvironmentManager.shared.thermalState,
+            lowPowerMode: EnvironmentManager.shared.lowPowerMode,
+            networkType: EnvironmentManager.shared.networkType,
+            absoluteAltitude: EnvironmentManager.shared.absoluteAltitude,
+
+            // Contagens
+            nearbyDevices: CrowdManager.shared.nearbyDevices,
+            contactCount: CrowdManager.shared.contactCount
         )
 
         websocket.send(device)

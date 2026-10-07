@@ -8,6 +8,22 @@ struct DeviceState: Codable {
     let accelerationY: Double
     let accelerationZ: Double
 
+    // Postura do aparelho: distingue no bolso, na mão, encostado no ouvido
+    let pitch: Double
+    let roll: Double
+    let yaw: Double
+
+    // O que o próprio iOS acha que ele está fazendo
+    let activity: String
+    let activityConfidence: String
+
+    // Contagem desde o início da performance
+    let steps: Int
+    let distance: Double
+    let floorsAscended: Int
+    let floorsDescended: Int
+    let cadence: Double
+
     // Localização
     let latitude: Double
     let longitude: Double
@@ -32,10 +48,32 @@ struct DeviceState: Codable {
     let proximity: Bool
     let orientation: String
 
-    // Áudio
+    // Áudio — nada é gravado, só medido
     let volume: Float
     let microphoneLevel: Float
+    let voiceRatio: Float
+    let speech: Bool
     let headphonesConnected: Bool
+
+    // Orientação da cabeça, quando há AirPods
+    let headAvailable: Bool
+    let headPitch: Double
+    let headYaw: Double
+
+    // Onde ele parou
+    let visitState: String
+    let minutesHere: Double
+    let visitCount: Int
+
+    // Ambiente do aparelho
+    let thermalState: String
+    let lowPowerMode: Bool
+    let networkType: String
+    let absoluteAltitude: Double
+
+    // Contagens, nunca identidades
+    let nearbyDevices: Int
+    let contactCount: Int
 
     func toJSON() -> String {
 

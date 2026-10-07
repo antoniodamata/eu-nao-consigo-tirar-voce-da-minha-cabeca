@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import config
 import state
 from hub import hub
+import contexto
 from registro import registro
 from llm import comment, chave_configurada, enxugar, PROMPT_ATIVO, MODEL
 
@@ -204,10 +205,37 @@ async def sensor_loop():
         )
 
 
+async def contexto_loop():
+    """Mantém rua, clima e sol atualizados sem atrapalhar o resto.
+
+    Vive fora do caminho do verso: quando o Claude é chamado, ele lê o que
+    já está em cache. Se ainda não chegou, o verso sai sem — e o próximo
+    já tem.
+    """
+
+    while True:
+
+        await asyncio.sleep(config.INTERVALO_CONTEXTO)
+
+        estado = state.current_device_state
+
+        if estado is None:
+            continue
+
+        try:
+            await contexto.manter(
+                estado.get("latitude"),
+                estado.get("longitude")
+            )
+        except Exception as e:
+            print("Erro no contexto:", e)
+
+
 @app.on_event("startup")
 async def startup():
     asyncio.create_task(claude_loop())
     asyncio.create_task(sensor_loop())
+    asyncio.create_task(contexto_loop())
 
 
 # A página pública fica por último para não capturar as rotas acima.

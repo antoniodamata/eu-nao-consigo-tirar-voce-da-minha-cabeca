@@ -55,6 +55,62 @@ h1 {
     display: none;
 }
 
+/* Sinopse: apparato, não poema. Mesma medida e mesmo recuo do título, em
+   cinza médio, para quem chega entender o que está lendo antes dos versos. */
+/* O botão é texto, não botão: mesma família e mesmo recuo do resto,
+   sublinhado pontilhado para dizer que é clicável sem virar interface. */
+#sobre {
+    display: block;
+    margin-left: 76px;
+    margin-top: 18px;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: var(--apagado);
+    cursor: pointer;
+    border-bottom: 1px dotted var(--tenue);
+    line-height: 1.4;
+}
+
+#sobre:hover {
+    color: var(--texto);
+    border-bottom-color: var(--apagado);
+}
+
+#sinopse {
+    margin-left: 76px;
+    max-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #555555;
+}
+
+#sinopse p {
+    margin-bottom: 15px;
+}
+
+#sinopse p:last-child {
+    margin-bottom: 0;
+}
+
+#sinopse .nota {
+    font-size: 12px;
+    color: var(--apagado);
+    margin-top: 20px;
+}
+
+#sinopse i {
+    font-style: italic;
+}
+
+@media (max-width: 760px) {
+    #sinopse {
+        max-width: none;
+    }
+}
+
 .hora {
     color: var(--tenue);
     font-variant-numeric: tabular-nums;
@@ -65,10 +121,11 @@ h1 {
    O título e a legenda recuam para alinhar com os versos, não com as horas. */
 #texto {
     display: grid;
-    grid-template-columns: 76px minmax(0, 400px);
+    grid-template-columns: 66px minmax(0, 398px);
+    column-gap: 10px;
     min-width: 0;
     max-width: 476px;
-    margin-top: 30px;
+    margin-top: 44px;
     text-align: left;
 }
 
@@ -97,6 +154,31 @@ h1 {
     position: sticky;
     top: 90px;
     color: var(--tenue);
+}
+
+/* Vista de satélite: a mesma largura da coluna, em escala de cinza, para
+   não quebrar a austeridade da página. É mais um mostrador, não uma foto. */
+#vista {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    background: #f2f2f2;
+    display: none;
+}
+
+#vista img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(1) contrast(1.05);
+    opacity: 0;
+    transition: opacity 1.2s ease-out;
+}
+
+#vista img.visivel {
+    opacity: 1;
 }
 
 .linha {
@@ -135,17 +217,11 @@ h1 {
         padding: 48px 24px 120px;
     }
 
-    h1, #registro {
-        margin-left: 62px;
-    }
-
+    /* O carimbo mede 64px: 62px de coluna fazia o verso colar nele.
+       A medida de 76px vale em qualquer largura. */
     #texto {
-        grid-template-columns: 62px minmax(0, 1fr);
+        grid-template-columns: 66px minmax(0, 1fr);
         max-width: none;
-    }
-
-    #texto.vazio {
-        margin-left: 62px;
     }
 
     #sensores {

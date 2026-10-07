@@ -11,11 +11,16 @@ maiores. Estamos, a todo momento, através de nossos celulares, computadores,
 se torna cada vez mais onisciente.
 
 Foi a partir dessas provocações que pensei na performance "Eu não consigo
-tirar você da minha cabeça". Um iPhone no meu bolso amostra vinte e duas
-grandezas do corpo que o carrega, duas vezes por segundo, e as entrega a um
-modelo de linguagem instruído a se comportar como alguém que me segue sem
-saber por quê. O divíduo aqui tem forma exata: um objeto JSON de vinte e
-duas chaves. O texto nunca volta ao telefone — aparece numa página pública,
+tirar você da minha cabeça". Um iPhone no meu bolso amostra quarenta e seis
+grandezas do corpo que o carrega, duas vezes por segundo — entre elas a
+classificação que o próprio sistema operacional faz do meu comportamento
+(parado, andando, correndo, em veículo, com grau de confiança), se há fala
+por perto, quantos aparelhos há ao redor, e há quantos minutos parei onde
+estou. O servidor completa isso com o nome da rua, o tempo que faz ali e
+quanto falta para o sol se pôr, e entrega o conjunto a um modelo de
+linguagem instruído a se comportar como alguém que me segue sem saber por
+quê. O divíduo aqui tem forma exata: um objeto JSON de quarenta e seis
+chaves. O texto nunca volta ao telefone — aparece numa página pública,
 com o horário de cada verso. E o aplicativo sobrevive no bolso porque
 declara que monitora localização em segundo plano, o mesmo mecanismo de
 qualquer aplicativo comercial: não burlei nada, a infraestrutura já estava

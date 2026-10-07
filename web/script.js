@@ -41,6 +41,27 @@ const MAX_BLOCOS = 400;
 const PAUSA_MAXIMA = 8000;
 const PAUSA_MINIMA = 400;
 
+// ---------------------------------------------------------------- satélite
+//
+// A imagem não é baixada nem guardada: o registro guarda a coordenada e o
+// navegador busca a vista na hora de exibir. Custo zero de armazenamento, e
+// na repetição a imagem refaz a caminhada sozinha.
+//
+// Padrão: Esri World Imagery — satélite, sem chave, sem cadastro.
+// Para trocar por Google ou Mapbox, é só reescrever montarVista().
+//
+const VISTA_ATIVA = true;
+
+// Meio-lado da área mostrada, em graus. 0.0012 ≈ 130 metros de lado.
+// Aumentar afasta a câmera e revela menos.
+const VISTA_RAIO = 0.0012;
+
+// Só busca imagem nova se ele andou mais que isto (graus ≈ 11 m).
+const VISTA_LIMIAR = 0.0001;
+
+// Intervalo mínimo entre duas buscas, em milissegundos.
+const VISTA_INTERVALO = 10000;
+
 const texto = document.getElementById("texto");
 const conexao = document.getElementById("conexao");
 const cabecalho = document.getElementById("registro");
@@ -128,6 +149,38 @@ function formatar(chave, valor) {
         case "volume":
             return Math.round(valor * 100) + "%";
 
+        case "steps":
+        case "floorsAscended":
+        case "floorsDescended":
+        case "visitCount":
+        case "nearbyDevices":
+        case "contactCount":
+            return String(Math.round(valor));
+
+        case "minutesHere":
+            return Math.round(valor) + " min";
+
+        case "voiceRatio":
+            return Math.round(valor * 100) + "%";
+
+        case "absoluteAltitude":
+            return Math.round(valor) + " m";
+
+        case "headYaw":
+        case "headPitch":
+            return (valor * 180 / Math.PI).toFixed(0) + "°";
+
+        case "distance":
+            return Math.round(valor) + " m";
+
+        case "cadence":
+            return valor.toFixed(2);
+
+        case "pitch":
+        case "roll":
+        case "yaw":
+            return (valor * 180 / Math.PI).toFixed(0) + "°";
+
         case "latitude":
         case "longitude":
             return valor.toFixed(4);
@@ -150,9 +203,71 @@ function formatar(chave, valor) {
     }
 }
 
+// ------------------------------------------------------------- satélite
+
+const vista = document.getElementById("vista");
+const satelite = document.getElementById("satelite");
+
+let vistaUltimaLat = null;
+let vistaUltimaLon = null;
+let vistaUltimoInstante = 0;
+
+function montarVista(lat, lon) {
+
+    const r = VISTA_RAIO;
+
+    const bbox = [lon - r, lat - r, lon + r, lat + r].join(",");
+
+    return "https://server.arcgisonline.com/arcgis/rest/services/"
+        + "World_Imagery/MapServer/export"
+        + `?bbox=${bbox}&bboxSR=4326&imageSR=3857`
+        + "&size=300,300&format=jpg&transparent=false&f=image";
+}
+
+function atualizarVista(estado) {
+
+    if (!VISTA_ATIVA || !estado) return;
+
+    const lat = estado.latitude;
+    const lon = estado.longitude;
+
+    if (typeof lat !== "number" || typeof lon !== "number") return;
+    if (lat === 0 && lon === 0) return;
+
+    const agora = Date.now();
+
+    if (agora - vistaUltimoInstante < VISTA_INTERVALO) return;
+
+    // Parado, a mesma imagem serve. Só busca de novo quando ele anda.
+    if (vistaUltimaLat !== null) {
+
+        const andou =
+            Math.abs(lat - vistaUltimaLat) > VISTA_LIMIAR ||
+            Math.abs(lon - vistaUltimaLon) > VISTA_LIMIAR;
+
+        if (!andou) return;
+    }
+
+    vistaUltimaLat = lat;
+    vistaUltimaLon = lon;
+    vistaUltimoInstante = agora;
+
+    const nova = new Image();
+
+    nova.onload = () => {
+        satelite.src = nova.src;
+        satelite.classList.add("visivel");
+        vista.style.display = "block";
+    };
+
+    nova.src = montarVista(lat, lon);
+}
+
 function pintarSensores(estado) {
 
     if (!estado) return;
+
+    atualizarVista(estado);
 
     for (const chave in campos) {
 
@@ -449,4 +564,23 @@ if (ARQUIVO) {
     tocarRegistro();
 } else {
     conectar();
+}
+
+// ------------------------------------------------------------- sobre
+
+// A sinopse nasce fechada: quem chega vê o poema primeiro, e abre o texto
+// se quiser saber o que está lendo.
+const botaoSobre = document.getElementById("sobre");
+const sinopse = document.getElementById("sinopse");
+
+if (botaoSobre && sinopse) {
+
+    botaoSobre.addEventListener("click", () => {
+
+        const estavaAberta = !sinopse.hidden;
+
+        sinopse.hidden = estavaAberta;
+        botaoSobre.setAttribute("aria-expanded", String(!estavaAberta));
+        botaoSobre.textContent = estavaAberta ? "sobre" : "fechar";
+    });
 }

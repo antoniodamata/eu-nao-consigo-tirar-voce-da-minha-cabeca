@@ -6,6 +6,9 @@ struct ContentView: View {
     @StateObject private var motion = MotionManager.shared
     @StateObject private var rede = WebSocketManager.shared
 
+    @StateObject private var activity = ActivityManager.shared
+    @StateObject private var pedometer = PedometerManager.shared
+
     @StateObject private var location = LocationManager.shared
     @StateObject private var magnetometer = MagnetometerManager.shared
     @StateObject private var barometer = BarometerManager.shared
@@ -35,6 +38,27 @@ struct ContentView: View {
                 Text("X: \(motion.state.accelerationX)")
                 Text("Y: \(motion.state.accelerationY)")
                 Text("Z: \(motion.state.accelerationZ)")
+
+                Divider()
+
+                Text("Atividade")
+                    .font(.headline)
+
+                Text("\(activity.activity) — confiança \(activity.confidence)")
+                Text("Pitch: \(motion.state.pitch)")
+                Text("Roll: \(motion.state.roll)")
+                Text("Yaw: \(motion.state.yaw)")
+
+                Divider()
+
+                Text("Pedômetro")
+                    .font(.headline)
+
+                Text("Passos: \(pedometer.steps)")
+                Text("Distância: \(Int(pedometer.distance)) m")
+                Text("Andares subidos: \(pedometer.floorsAscended)")
+                Text("Andares descidos: \(pedometer.floorsDescended)")
+                Text("Cadência: \(pedometer.cadence, specifier: "%.2f") passos/s")
 
                 Divider()
 

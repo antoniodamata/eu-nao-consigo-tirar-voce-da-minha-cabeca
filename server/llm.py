@@ -6,6 +6,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
+from contexto import ao_redor
+
 load_dotenv()
 
 MODEL = "claude-sonnet-4-6"
@@ -291,6 +293,22 @@ def comment(
         f"O que mudou desde a última vez:\n{mudancas(device_state, anterior)}\n\n"
         f"Onde ele está agora:\n{dados}"
     )
+
+    # O mundo em volta da coordenada: rua, clima, sol, o que existe perto.
+    # Falha em silêncio — se a API não responder, o verso sai sem isso.
+    try:
+        volta = ao_redor(
+            device_state.get("latitude"),
+            device_state.get("longitude")
+        )
+
+        if volta:
+            conteudo += "\n\nO mundo em volta dele:\n" + json.dumps(
+                volta, indent=1, ensure_ascii=False
+            )
+
+    except Exception:
+        pass
 
     if correcao:
         conteudo += f"\n\nCorreções obrigatórias para esta linha:\n{correcao}"

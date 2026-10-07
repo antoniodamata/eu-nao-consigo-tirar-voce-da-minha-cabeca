@@ -4,3 +4,4 @@ websockets
 pydantic
 anthropic
 python-dotenv
+httpx

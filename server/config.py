@@ -13,3 +13,8 @@ INTERVALO_CLAUDE = 6.0
 
 # Frequência com que o estado bruto dos sensores é enviado aos navegadores.
 INTERVALO_SENSORES = 0.5
+
+# Com que frequência o servidor confere se rua, clima e sol venceram.
+# Não é a frequência das buscas: cada uma tem validade própria e a grade de
+# coordenadas evita repetir pedido para o mesmo lugar.
+INTERVALO_CONTEXTO = 20.0

@@ -9,6 +9,12 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>A performance continua enquanto o aparelho está no bolso, com a tela apagada. Para isso o aplicativo precisa acompanhar sua localização também em segundo plano.</string>
 
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>O aplicativo conta quantos aparelhos existem por perto, como medida de quanta gente há ao redor. Nenhum identificador é guardado ou enviado.</string>
+
+	<key>NSContactsUsageDescription</key>
+	<string>O aplicativo usa apenas o número total de nomes guardados na agenda. Nenhum nome, telefone ou endereço é lido, guardado ou enviado.</string>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
