@@ -133,14 +133,21 @@ function hora(epoch) {
     return `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())}`;
 }
 
+const MESES = {
+    pt: ["janeiro", "fevereiro", "março", "abril", "maio", "junho",
+         "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
+    en: ["January", "February", "March", "April", "May", "June",
+         "July", "August", "September", "October", "November", "December"]
+};
+
 function dataPorExtenso(iso) {
 
-    const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho",
-        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
-
     const d = noFuso(iso);
+    const mes = MESES[lingua][d.getUTCMonth()];
 
-    return `${d.getUTCDate()} de ${meses[d.getUTCMonth()]} de ${d.getUTCFullYear()}`;
+    return lingua === "en"
+        ? `${d.getUTCDate()} ${mes} ${d.getUTCFullYear()}`
+        : `${d.getUTCDate()} de ${mes} de ${d.getUTCFullYear()}`;
 }
 
 function horaCurta(iso) {
@@ -390,6 +397,30 @@ function anunciar(html) {
     cabecalho.style.display = html ? "block" : "none";
 }
 
+// A sessão fica guardada para que a legenda possa ser reescrita quando a
+// língua muda — antes ela era montada uma vez e congelava em português.
+let sessaoAtual = null;
+
+function escreverLegenda() {
+
+    if (!sessaoAtual) return;
+
+    const quando = dataPorExtenso(sessaoAtual.inicio);
+    const de = horaCurta(sessaoAtual.inicio);
+    const ate = sessaoAtual.fim ? horaCurta(sessaoAtual.fim) : "?";
+    const n = sessaoAtual.linhas;
+
+    const ponto = " &nbsp;·&nbsp; ";
+
+    anunciar(
+        lingua === "en"
+            ? `record of the performance of ${quando}, ${de} to ${ate}`
+              + ponto + `${n} lines` + ponto + "looping"
+            : `registro da performance de ${quando}, das ${de} às ${ate}`
+              + ponto + `${n} versos` + ponto + "em repetição"
+    );
+}
+
 function pararRepeticao() {
     if (repeticao) {
         clearTimeout(repeticao);
@@ -409,31 +440,28 @@ async function tocarRegistro() {
         const r = await fetch(endereco);
         gravacao = await r.json();
     } catch {
-        anunciar("não foi possível carregar o registro");
+        anunciar(lingua === "en" ? "could not load the record"
+                            : "não foi possível carregar o registro");
         return;
     }
 
     if (gravacao && gravacao.erro) {
-        anunciar("performance não encontrada");
+        anunciar(lingua === "en" ? "performance not found"
+                                 : "performance não encontrada");
         return;
     }
 
     if (!gravacao || !gravacao.linhas || !gravacao.linhas.length) {
-        anunciar("nenhuma performance registrada ainda");
+        anunciar(lingua === "en" ? "no performance recorded yet"
+                                 : "nenhuma performance registrada ainda");
         return;
     }
 
     const sessao = gravacao.sessao;
     const linhas = gravacao.linhas;
 
-    const inicio = dataPorExtenso(sessao.inicio);
-    const de = horaCurta(sessao.inicio);
-    const ate = sessao.fim ? horaCurta(sessao.fim) : "?";
-
-    anunciar(
-        `registro da performance de ${inicio}, das ${de} às ${ate} &nbsp;·&nbsp; ` +
-        `${sessao.linhas} versos &nbsp;·&nbsp; em repetição`
-    );
+    sessaoAtual = sessao;
+    escreverLegenda();
 
     let i = 0;
 
@@ -481,6 +509,7 @@ function entrarAoVivo() {
     aoVivo = true;
     pararRepeticao();
     limpar();
+    sessaoAtual = null;
     anunciar("");
 }
 
@@ -693,6 +722,7 @@ function aplicarLingua() {
     for (const chave in anterioresValores) delete anterioresValores[chave];
     if (ultimoEstado) pintarSensores(ultimoEstado, true);
 
+    escreverLegenda();
     redesenharVersos();
 }
 
