@@ -47,7 +47,8 @@ class Sessao:
             encoding="utf-8"
         )
 
-    def anotar_linha(self, texto: str, estado: dict) -> None:
+    def anotar_linha(self, texto: str, estado: dict,
+                     texto_en: str = None) -> None:
 
         agora = time.time()
 
@@ -56,6 +57,7 @@ class Sessao:
             "epoch": round(agora, 3),
             "desde_inicio": round(agora - self.meta["inicio_epoch"], 3),
             "texto": texto,
+            "texto_en": texto_en,
             "estado": estado
         }
 
@@ -131,9 +133,10 @@ class Registro:
         if self.atual is not None:
             self.atual.contar_leitura()
 
-    def anotar(self, texto: str, estado: dict) -> None:
+    def anotar(self, texto: str, estado: dict,
+               texto_en: str = None) -> None:
         if self.atual is not None:
-            self.atual.anotar_linha(texto, estado)
+            self.atual.anotar_linha(texto, estado, texto_en)
 
     def encerrar(self) -> None:
 

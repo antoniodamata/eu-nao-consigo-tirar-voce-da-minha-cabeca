@@ -13,75 +13,86 @@
 
         <div id="coluna">
 
-            <h1>Eu não consigo tirar você da minha cabeça</h1>
+            <h1 data-pt="Eu não consigo tirar você da minha cabeça" data-en="I can't get you out of my head">Eu não consigo tirar você da minha cabeça</h1>
 
             <p id="registro"></p>
 
-            <button id="sobre" type="button" aria-expanded="false" aria-controls="sinopse">sobre</button>
+            <div id="barra">
+                <button id="sobre" type="button" aria-expanded="false" aria-controls="sinopse" data-pt="sobre" data-en="about">sobre</button>
+                <span id="linguas">
+                    <button type="button" class="lingua ativa" data-lingua="pt">pt</button><span class="barrinha">/</span><button type="button" class="lingua" data-lingua="en">en</button>
+                </span>
+            </div>
 
             <section id="sinopse" hidden>
 
+                <div lang="pt">
                 <p>No início dos anos 1990, Gilles Deleuze propôs que estávamos nos tornando divíduos: indivíduos absolutamente capturados por sistemas binários de controle. Hoje essa realidade adquire contornos insuportáveis, e o controle e a vigilância nunca pareceram maiores. Estamos, a todo momento, através de nossos celulares, computadores e óculos, gerando dados para alimentar um sistema que se torna cada vez mais onisciente.</p>
-
                 <p>Um iPhone no meu bolso amostra dezenas de grandezas do corpo que o carrega, duas vezes por segundo &mdash; entre elas a classificação que o próprio sistema operacional faz do meu comportamento &mdash; e as entrega a um modelo de linguagem instruído a se comportar como alguém que me segue sem saber por quê. O divíduo aqui tem forma exata: um objeto JSON. O texto nunca volta ao telefone: aparece nesta página, com o horário de cada verso. E o aplicativo sobrevive no bolso porque declara que monitora localização em segundo plano, o mesmo mecanismo de qualquer aplicativo comercial. Não burlei nada: a infraestrutura já estava pronta.</p>
-
                 <p>Donna Haraway propõe que seu mito ciborgue é sobretudo um mito irônico &mdash; como transformar uma figura construída pela indústria militar machista numa figura anti-heroica feminista? Inspirado por sua proposta, esta obra pergunta: como desconstruir artisticamente o controle e a vigilância do capitalismo cibernético através da literatura?</p>
-
                 <p class="nota">Na linhagem do <i>Following Piece</i> de Vito Acconci (1969) e de <i>The Address Book</i> de Sophie Calle (1983). A forma do verso vem de <i>Sentences</i>, de Charles Bernstein (1976).</p>
+                </div>
+
+                <div lang="en" hidden>
+                <p>In the early 1990s, Gilles Deleuze proposed that we were becoming dividuals: individuals wholly captured by binary systems of control. Today that reality has taken on unbearable contours, and control and surveillance have never seemed greater. At every moment, through our phones, computers and glasses, we generate data to feed a system that grows ever more omniscient.</p>
+                <p>An iPhone in my pocket samples dozens of magnitudes from the body carrying it, twice a second &mdash; among them the classification the operating system itself makes of my behaviour &mdash; and hands them to a language model instructed to behave like someone following me without knowing why. The dividual here has an exact form: a JSON object. The text never returns to the phone: it appears on this page, with the time of each line. And the application survives in the pocket because it declares that it monitors location in the background, the same mechanism as any commercial app. I circumvented nothing: the infrastructure was already in place.</p>
+                <p>Donna Haraway proposes that her cyborg myth is above all an ironic myth &mdash; how to turn a figure built by the sexist military industry into a feminist anti-heroic one? Inspired by her proposal, this work asks: how might we artistically dismantle the control and surveillance of cybernetic capitalism through literature?</p>
+                <p class="nota">In the lineage of Vito Acconci's <i>Following Piece</i> (1969) and Sophie Calle's <i>The Address Book</i> (1983). The form of the line comes from Charles Bernstein's <i>Sentences</i> (1976).</p>
+                </div>
 
             </section>
 
-            <article id="texto" class="vazio">aguardando</article>
+            <article id="texto" class="vazio" data-pt="aguardando" data-en="waiting">aguardando</article>
 
         </div>
 
         <aside id="sensores">
 
-            <div id="vista"><img id="satelite" alt="" /></div>
+            <div id="vista"><img id="satelite" alt="" /><span id="ponto"></span></div>
 
-            <div class="linha"><span class="rotulo">atividade</span><span class="valor" data-campo="activity">—</span></div>
-            <div class="linha"><span class="rotulo">confiança</span><span class="valor" data-campo="activityConfidence">—</span></div>
-            <div class="linha"><span class="rotulo">passos</span><span class="valor" data-campo="steps">—</span></div>
-            <div class="linha"><span class="rotulo">distância</span><span class="valor" data-campo="distance">—</span></div>
-            <div class="linha"><span class="rotulo">andares +</span><span class="valor" data-campo="floorsAscended">—</span></div>
-            <div class="linha"><span class="rotulo">andares −</span><span class="valor" data-campo="floorsDescended">—</span></div>
-            <div class="linha"><span class="rotulo">cadência</span><span class="valor" data-campo="cadence">—</span></div>
-            <div class="linha"><span class="rotulo">pitch</span><span class="valor" data-campo="pitch">—</span></div>
-            <div class="linha"><span class="rotulo">roll</span><span class="valor" data-campo="roll">—</span></div>
-            <div class="linha"><span class="rotulo">yaw</span><span class="valor" data-campo="yaw">—</span></div>
-            <div class="linha"><span class="rotulo">bateria</span><span class="valor" data-campo="batteryLevel">—</span></div>
-            <div class="linha"><span class="rotulo">brilho</span><span class="valor" data-campo="brightness">—</span></div>
-            <div class="linha"><span class="rotulo">volume</span><span class="valor" data-campo="volume">—</span></div>
-            <div class="linha"><span class="rotulo">microfone</span><span class="valor" data-campo="microphoneLevel">—</span></div>
-            <div class="linha"><span class="rotulo">latitude</span><span class="valor" data-campo="latitude">—</span></div>
-            <div class="linha"><span class="rotulo">longitude</span><span class="valor" data-campo="longitude">—</span></div>
-            <div class="linha"><span class="rotulo">altitude</span><span class="valor" data-campo="altitude">—</span></div>
-            <div class="linha"><span class="rotulo">velocidade</span><span class="valor" data-campo="speed">—</span></div>
-            <div class="linha"><span class="rotulo">rumo</span><span class="valor" data-campo="heading">—</span></div>
-            <div class="linha"><span class="rotulo">aceleração x</span><span class="valor" data-campo="accelerationX">—</span></div>
-            <div class="linha"><span class="rotulo">aceleração y</span><span class="valor" data-campo="accelerationY">—</span></div>
-            <div class="linha"><span class="rotulo">aceleração z</span><span class="valor" data-campo="accelerationZ">—</span></div>
-            <div class="linha"><span class="rotulo">magnético x</span><span class="valor" data-campo="magneticX">—</span></div>
-            <div class="linha"><span class="rotulo">magnético y</span><span class="valor" data-campo="magneticY">—</span></div>
-            <div class="linha"><span class="rotulo">magnético z</span><span class="valor" data-campo="magneticZ">—</span></div>
-            <div class="linha"><span class="rotulo">pressão</span><span class="valor" data-campo="pressure">—</span></div>
-            <div class="linha"><span class="rotulo">alt. relativa</span><span class="valor" data-campo="relativeAltitude">—</span></div>
-            <div class="linha"><span class="rotulo">orientação</span><span class="valor" data-campo="orientation">—</span></div>
-            <div class="linha"><span class="rotulo">proximidade</span><span class="valor" data-campo="proximity">—</span></div>
-            <div class="linha"><span class="rotulo">fones</span><span class="valor" data-campo="headphonesConnected">—</span></div>
-            <div class="linha"><span class="rotulo">fala perto</span><span class="valor" data-campo="speech">—</span></div>
-            <div class="linha"><span class="rotulo">razão de voz</span><span class="valor" data-campo="voiceRatio">—</span></div>
-            <div class="linha"><span class="rotulo">cabeça</span><span class="valor" data-campo="headYaw">—</span></div>
-            <div class="linha"><span class="rotulo">parada</span><span class="valor" data-campo="visitState">—</span></div>
-            <div class="linha"><span class="rotulo">minutos ali</span><span class="valor" data-campo="minutesHere">—</span></div>
-            <div class="linha"><span class="rotulo">paradas</span><span class="valor" data-campo="visitCount">—</span></div>
-            <div class="linha"><span class="rotulo">aparelho</span><span class="valor" data-campo="thermalState">—</span></div>
-            <div class="linha"><span class="rotulo">economia</span><span class="valor" data-campo="lowPowerMode">—</span></div>
-            <div class="linha"><span class="rotulo">rede</span><span class="valor" data-campo="networkType">—</span></div>
-            <div class="linha"><span class="rotulo">alt. absoluta</span><span class="valor" data-campo="absoluteAltitude">—</span></div>
-            <div class="linha"><span class="rotulo">aparelhos perto</span><span class="valor" data-campo="nearbyDevices">—</span></div>
-            <div class="linha"><span class="rotulo">nomes guardados</span><span class="valor" data-campo="contactCount">—</span></div>
-            <div class="linha"><span class="rotulo">sinal</span><span class="valor" id="conexao">offline</span></div>
+            <div class="linha"><span class="rotulo" data-pt="atividade" data-en="activity">atividade</span><span class="valor" data-campo="activity">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="confiança" data-en="confidence">confiança</span><span class="valor" data-campo="activityConfidence">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="passos" data-en="steps">passos</span><span class="valor" data-campo="steps">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="distância" data-en="distance">distância</span><span class="valor" data-campo="distance">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="andares +" data-en="floors up">andares +</span><span class="valor" data-campo="floorsAscended">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="andares −" data-en="floors down">andares −</span><span class="valor" data-campo="floorsDescended">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="cadência" data-en="cadence">cadência</span><span class="valor" data-campo="cadence">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="pitch" data-en="pitch">pitch</span><span class="valor" data-campo="pitch">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="roll" data-en="roll">roll</span><span class="valor" data-campo="roll">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="yaw" data-en="yaw">yaw</span><span class="valor" data-campo="yaw">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="bateria" data-en="battery">bateria</span><span class="valor" data-campo="batteryLevel">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="brilho" data-en="brightness">brilho</span><span class="valor" data-campo="brightness">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="volume" data-en="volume">volume</span><span class="valor" data-campo="volume">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="microfone" data-en="microphone">microfone</span><span class="valor" data-campo="microphoneLevel">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="latitude" data-en="latitude">latitude</span><span class="valor" data-campo="latitude">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="longitude" data-en="longitude">longitude</span><span class="valor" data-campo="longitude">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="altitude" data-en="altitude">altitude</span><span class="valor" data-campo="altitude">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="velocidade" data-en="speed">velocidade</span><span class="valor" data-campo="speed">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="rumo" data-en="heading">rumo</span><span class="valor" data-campo="heading">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="aceleração x" data-en="acceleration x">aceleração x</span><span class="valor" data-campo="accelerationX">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="aceleração y" data-en="acceleration y">aceleração y</span><span class="valor" data-campo="accelerationY">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="aceleração z" data-en="acceleration z">aceleração z</span><span class="valor" data-campo="accelerationZ">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="magnético x" data-en="magnetic x">magnético x</span><span class="valor" data-campo="magneticX">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="magnético y" data-en="magnetic y">magnético y</span><span class="valor" data-campo="magneticY">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="magnético z" data-en="magnetic z">magnético z</span><span class="valor" data-campo="magneticZ">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="pressão" data-en="pressure">pressão</span><span class="valor" data-campo="pressure">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="alt. relativa" data-en="rel. altitude">alt. relativa</span><span class="valor" data-campo="relativeAltitude">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="orientação" data-en="orientation">orientação</span><span class="valor" data-campo="orientation">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="proximidade" data-en="proximity">proximidade</span><span class="valor" data-campo="proximity">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="fones" data-en="headphones">fones</span><span class="valor" data-campo="headphonesConnected">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="fala perto" data-en="speech nearby">fala perto</span><span class="valor" data-campo="speech">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="razão de voz" data-en="voice ratio">razão de voz</span><span class="valor" data-campo="voiceRatio">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="cabeça" data-en="head">cabeça</span><span class="valor" data-campo="headYaw">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="parada" data-en="stop">parada</span><span class="valor" data-campo="visitState">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="minutos ali" data-en="minutes there">minutos ali</span><span class="valor" data-campo="minutesHere">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="paradas" data-en="stops">paradas</span><span class="valor" data-campo="visitCount">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="aparelho" data-en="device">aparelho</span><span class="valor" data-campo="thermalState">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="economia" data-en="low power">economia</span><span class="valor" data-campo="lowPowerMode">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="rede" data-en="network">rede</span><span class="valor" data-campo="networkType">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="alt. absoluta" data-en="abs. altitude">alt. absoluta</span><span class="valor" data-campo="absoluteAltitude">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="aparelhos perto" data-en="devices nearby">aparelhos perto</span><span class="valor" data-campo="nearbyDevices">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="nomes guardados" data-en="names stored">nomes guardados</span><span class="valor" data-campo="contactCount">—</span></div>
+            <div class="linha"><span class="rotulo" data-pt="sinal" data-en="signal">sinal</span><span class="valor" id="conexao">offline</span></div>
 
         </aside>
 

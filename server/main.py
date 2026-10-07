@@ -10,6 +10,7 @@ from hub import hub
 import contexto
 from registro import registro
 from llm import comment, chave_configurada, enxugar, PROMPT_ATIVO, MODEL
+from traducao import traduzir
 
 app = FastAPI(title="não consigo tirar você da minha cabeça")
 
@@ -162,8 +163,13 @@ async def claude_loop():
 
             estado_anterior = device_state
 
-            state.registrar_texto(texto)
-            registro.anotar(texto, enxugar(device_state))
+            # A tradução nasce junto com o verso e é gravada com ele.
+            # Se falhar, o verso sai sem — e aparece em português na
+            # versão inglesa, o que é honesto.
+            texto_en = await asyncio.to_thread(traduzir, texto)
+
+            state.registrar_texto(texto, texto_en)
+            registro.anotar(texto, enxugar(device_state), texto_en)
             ultimo_erro = None
 
             print("\n================ CLAUDE ================\n")

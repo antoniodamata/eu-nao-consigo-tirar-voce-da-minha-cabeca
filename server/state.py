@@ -7,6 +7,9 @@ current_device_state: Optional[dict] = None
 # Último texto produzido pelo Claude
 current_text: Optional[str] = None
 
+# A tradução dele, gravada no mesmo instante
+current_text_en: Optional[str] = None
+
 # Momento (epoch) em que o texto foi gerado
 last_update: Optional[float] = None
 
@@ -31,15 +34,16 @@ def ultimas_linhas(n: int = 8) -> list:
     return linhas[-n:]
 
 
-def registrar_texto(texto: str) -> None:
-    """Guarda o texto novo e empurra o anterior para o histórico."""
+def registrar_texto(texto: str, texto_en: str = None) -> None:
+    """Guarda o verso novo e empurra o anterior para o histórico."""
 
-    global current_text, last_update
+    global current_text, current_text_en, last_update
 
     if current_text is not None:
         history.append(
             {
                 "text": current_text,
+                "text_en": current_text_en,
                 "timestamp": last_update
             }
         )
@@ -47,6 +51,7 @@ def registrar_texto(texto: str) -> None:
         del history[:-HISTORY_MAX]
 
     current_text = texto
+    current_text_en = texto_en
     last_update = time.time()
 
 
@@ -56,6 +61,7 @@ def snapshot() -> dict:
     return {
         "type": "update",
         "text": current_text,
+        "text_en": current_text_en,
         "state": current_device_state,
         "timestamp": last_update
     }
@@ -68,6 +74,7 @@ def bootstrap() -> dict:
         "type": "bootstrap",
         "ao_vivo": current_device_state is not None,
         "text": current_text,
+        "text_en": current_text_en,
         "state": current_device_state,
         "timestamp": last_update,
         "history": history[-BOOTSTRAP_LINHAS:]

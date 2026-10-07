@@ -75,6 +75,26 @@ document.querySelectorAll("[data-campo]").forEach(el => {
 const anterioresValores = {};
 
 let ultimoTimestamp = null;
+// Guardamos os versos como dados, não só como pixels: trocar de língua
+// redesenha a coluna inteira a partir daqui, sem pedir nada ao servidor.
+const versosNaTela = [];
+let ultimoEstado = null;
+
+function redesenharVersos() {
+
+    texto.textContent = "";
+
+    if (!versosNaTela.length) {
+        texto.classList.add("vazio");
+        texto.textContent = lingua === "en" ? "waiting" : "aguardando";
+        return;
+    }
+
+    texto.classList.remove("vazio");
+
+    versosNaTela.forEach(v => desenhar(v.pt, v.en, v.epoch, false));
+}
+
 let aoVivo = false;
 let repeticao = null;
 
@@ -221,7 +241,7 @@ function montarVista(lat, lon) {
     return "https://server.arcgisonline.com/arcgis/rest/services/"
         + "World_Imagery/MapServer/export"
         + `?bbox=${bbox}&bboxSR=4326&imageSR=3857`
-        + "&size=300,300&format=jpg&transparent=false&f=image";
+        + "&size=450,450&format=jpg&transparent=false&f=image";
 }
 
 function atualizarVista(estado) {
@@ -258,24 +278,27 @@ function atualizarVista(estado) {
         satelite.src = nova.src;
         satelite.classList.add("visivel");
         vista.style.display = "block";
+        vista.classList.add("ativa");
     };
 
     nova.src = montarVista(lat, lon);
 }
 
-function pintarSensores(estado) {
+function pintarSensores(estado, forcar = false) {
 
     if (!estado) return;
+
+    ultimoEstado = estado;
 
     atualizarVista(estado);
 
     for (const chave in campos) {
 
         const bruto = estado[chave];
-        const formatado = formatar(chave, bruto);
+        const formatado = traduzirValor(formatar(chave, bruto));
         const el = campos[chave];
 
-        if (el.textContent === formatado) continue;
+        if (!forcar && el.textContent === formatado) continue;
 
         el.textContent = formatado;
 
@@ -300,9 +323,10 @@ function perto(margem = 140) {
 function limpar() {
     texto.textContent = "";
     texto.classList.remove("vazio");
+    versosNaTela.length = 0;
 }
 
-function acrescentar(trecho, epoch, animar = true) {
+function acrescentar(trecho, epoch, animar = true, trechoEn = null) {
 
     if (!trecho) return;
 
@@ -310,13 +334,25 @@ function acrescentar(trecho, epoch, animar = true) {
 
     if (!limpo) return;
 
+    versosNaTela.push({ pt: limpo, en: trechoEn, epoch: epoch });
+
+    while (versosNaTela.length > MAX_BLOCOS) versosNaTela.shift();
+
+    desenhar(limpo, trechoEn, epoch, animar);
+}
+
+function desenhar(limpo, trechoEn, epoch, animar) {
+
     const seguir = perto();
 
     if (texto.classList.contains("vazio")) limpar();
 
+    // Sem tradução gravada, o verso aparece em português mesmo em inglês.
+    const corpo = (lingua === "en" && trechoEn) ? trechoEn : limpo;
+
     // Uma resposta pode trazer até três versos. Todos vieram do mesmo
     // instante, então só o primeiro leva o carimbo — como uma mensagem só.
-    const versos = limpo.split("\n").map(v => v.trim()).filter(Boolean);
+    const versos = corpo.split("\n").map(v => v.trim()).filter(Boolean);
 
     versos.forEach((linha, i) => {
 
@@ -409,7 +445,7 @@ async function tocarRegistro() {
 
         const linha = linhas[i];
 
-        acrescentar(linha.texto, linha.epoch, true);
+        acrescentar(linha.texto, linha.epoch, true, linha.texto_en);
 
         if (linha.estado) pintarSensores(linha.estado);
 
@@ -454,7 +490,8 @@ let socket = null;
 let tentativa = 0;
 
 function marcarConexao(online) {
-    conexao.textContent = online ? "online" : "offline";
+    conexao.dataset.estado = online ? "online" : "offline";
+    conexao.textContent = conexao.dataset.estado;
     conexao.className = "valor " + (online ? "online" : "offline");
 }
 
@@ -502,10 +539,10 @@ function conectar() {
                 entrarAoVivo();
 
                 (dados.history || []).forEach(
-                    item => acrescentar(item.text, item.timestamp, false)
+                    item => acrescentar(item.text, item.timestamp, false, item.text_en)
                 );
 
-                acrescentar(dados.text, dados.timestamp, false);
+                acrescentar(dados.text, dados.timestamp, false, dados.text_en);
                 ultimoTimestamp = dados.timestamp;
 
                 pintarSensores(dados.state);
@@ -526,7 +563,7 @@ function conectar() {
             // filtrar por texto. O timestamp garante uma entrada por geração.
             if (dados.timestamp !== ultimoTimestamp) {
                 ultimoTimestamp = dados.timestamp;
-                acrescentar(dados.text, dados.timestamp);
+                acrescentar(dados.text, dados.timestamp, true, dados.text_en);
             }
 
             pintarSensores(dados.state);
@@ -584,3 +621,87 @@ if (botaoSobre && sinopse) {
         botaoSobre.textContent = estavaAberta ? "sobre" : "fechar";
     });
 }
+
+// ------------------------------------------------------------- língua
+
+// O português é o poema; o inglês é documentação dele. Quando um verso não
+// tem tradução gravada, aparece em português mesmo na versão inglesa — é o
+// que um catálogo bilíngue faz, e é honesto.
+let lingua = "pt";
+
+try {
+    const guardada = localStorage.getItem("lingua");
+    if (guardada === "pt" || guardada === "en") lingua = guardada;
+} catch {}
+
+// Valores que o aparelho manda já escritos em português.
+const VALORES_EN = {
+    "sim": "yes", "não": "no",
+    "parado": "still", "andando": "walking", "correndo": "running",
+    "de bicicleta": "cycling", "em veículo": "in a vehicle",
+    "desconhecida": "unknown",
+    "alta": "high", "média": "medium", "baixa": "low",
+    "carregando": "charging", "completa": "full", "na bateria": "on battery",
+    "normal": "normal", "morno": "warm", "quente": "hot",
+    "muito quente": "very hot",
+    "wi-fi": "wi-fi", "celular": "cellular", "cabo": "wired",
+    "sem rede": "no network", "outra": "other",
+    "chegou": "arrived", "saiu": "left",
+    "portrait": "portrait", "portrait invertido": "portrait upside down",
+    "landscape esquerda": "landscape left", "landscape direita": "landscape right",
+    "tela para cima": "face up", "tela para baixo": "face down"
+};
+
+function traduzirValor(texto) {
+    if (lingua !== "en") return texto;
+    const chave = String(texto).toLowerCase();
+    return VALORES_EN[chave] !== undefined ? VALORES_EN[chave] : texto;
+}
+
+function aplicarLingua() {
+
+    document.documentElement.lang = lingua === "en" ? "en" : "pt-BR";
+
+    document.querySelectorAll("[data-pt][data-en]").forEach(el => {
+        const novo = el.dataset[lingua];
+        if (novo !== undefined && el.id !== "sobre") el.textContent = novo;
+    });
+
+    // O botão "sobre" muda de rótulo conforme está aberto ou fechado.
+    if (botaoSobre && sinopse) {
+        const aberta = !sinopse.hidden;
+        botaoSobre.textContent = aberta
+            ? (lingua === "en" ? "close" : "fechar")
+            : botaoSobre.dataset[lingua];
+    }
+
+    document.querySelectorAll("#sinopse [lang]").forEach(bloco => {
+        bloco.hidden = bloco.getAttribute("lang") !== lingua;
+    });
+
+    document.querySelectorAll(".lingua").forEach(b => {
+        b.classList.toggle("ativa", b.dataset.lingua === lingua);
+    });
+
+    if (conexao.dataset.estado) {
+        conexao.textContent = lingua === "en"
+            ? conexao.dataset.estado
+            : (conexao.dataset.estado === "online" ? "online" : "offline");
+    }
+
+    // Os valores dos sensores precisam ser reescritos na língua nova.
+    for (const chave in anterioresValores) delete anterioresValores[chave];
+    if (ultimoEstado) pintarSensores(ultimoEstado, true);
+
+    redesenharVersos();
+}
+
+document.querySelectorAll(".lingua").forEach(botao => {
+    botao.addEventListener("click", () => {
+        lingua = botao.dataset.lingua;
+        try { localStorage.setItem("lingua", lingua); } catch {}
+        aplicarLingua();
+    });
+});
+
+aplicarLingua();
