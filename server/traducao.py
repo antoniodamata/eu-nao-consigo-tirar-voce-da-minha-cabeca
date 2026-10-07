@@ -17,6 +17,8 @@ from typing import Optional
 
 from anthropic import Anthropic
 
+from llm import primeiro_texto
+
 MODELO = "claude-haiku-4-5"
 MAX_TOKENS = 150
 
@@ -67,12 +69,11 @@ def traduzir(texto: str) -> Optional[str]:
         resposta = cliente().messages.create(
             model=MODELO,
             max_tokens=MAX_TOKENS,
-            temperature=1.0,
             system=INSTRUCAO,
             messages=[{"role": "user", "content": texto}]
         )
 
-        traduzido = resposta.content[0].text.strip()
+        traduzido = primeiro_texto(resposta).strip()
 
         # Mantém no máximo o mesmo número de linhas do original.
         limite = len([l for l in texto.split("\n") if l.strip()])

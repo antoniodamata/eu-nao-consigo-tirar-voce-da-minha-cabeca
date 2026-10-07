@@ -2,6 +2,8 @@ fastapi
 uvicorn[standard]
 websockets
 pydantic
-anthropic
+# Fixado: a 1.0 removeu parametros de Messages.create() e quebrou o
+# servidor num deploy. Subir de versao agora e decisao, nao acidente.
+anthropic==1.12.0
 python-dotenv
 httpx

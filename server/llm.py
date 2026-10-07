@@ -27,9 +27,10 @@ MEMORIA = 8
 # reduz o custo de entrada, que é o que domina quando a saída é uma linha.
 CASAS = 3
 
-# Máximo permitido pela API da Anthropic. Também é o padrão dela, então isto
-# é mais explicitação do que mudança.
-TEMPERATURA = 1.0
+# A temperatura não é mais enviada: versões recentes do SDK da Anthropic
+# removeram o parâmetro de Messages.create(), e passá-lo derruba a chamada.
+# Não se perde nada — o padrão da API já é 1.0, o máximo, que era o que
+# queríamos.
 
 # Regime de linguagem ativo. Trocar este nome muda o tipo de texto
 # produzido sem alterar nada da infraestrutura.
@@ -82,6 +83,21 @@ def carregar_prompt(nome: str = None) -> str:
         )
 
     return caminho.read_text(encoding="utf-8").strip()
+
+
+def primeiro_texto(resposta) -> str:
+    """Extrai o texto da resposta sem depender do formato exato do SDK.
+
+    Entre versões o conteúdo pode vir com blocos de tipos diferentes. Em vez
+    de assumir content[0].text, procuramos o primeiro bloco que tenha texto.
+    """
+
+    for bloco in getattr(resposta, "content", []) or []:
+        texto = getattr(bloco, "text", None)
+        if texto:
+            return texto
+
+    return ""
 
 
 def enxugar(device_state: dict) -> dict:
@@ -316,7 +332,6 @@ def comment(
     response = cliente().messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
-        temperature=TEMPERATURA,
         system=constituicao,
         messages=[
             {
@@ -326,7 +341,7 @@ def comment(
         ]
     )
 
-    texto = response.content[0].text.strip()
+    texto = primeiro_texto(response).strip()
 
     versos = [l.strip() for l in texto.split("\n") if l.strip()]
 
