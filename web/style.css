@@ -79,6 +79,41 @@ h1 {
 
 /* ---------------------------------------------------------- barra e línguas */
 
+/* Índice de performances: mesma gramática do seletor de língua.
+   A que está tocando fica preta, as outras em cinza clicável. */
+#escolha {
+    font-size: 11px;
+    color: var(--tenue);
+    margin-left: 76px;
+    max-width: 400px;
+    line-height: 1.9;
+    margin-top: 5px;
+    display: none;
+}
+
+#escolha .dia {
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: var(--tenue);
+    cursor: pointer;
+}
+
+#escolha .dia:hover {
+    color: var(--apagado);
+}
+
+#escolha .dia.ativa {
+    color: var(--texto);
+}
+
+#escolha .separa {
+    margin: 0 5px;
+    color: var(--tenue);
+}
+
 #barra {
     display: flex;
     align-items: baseline;

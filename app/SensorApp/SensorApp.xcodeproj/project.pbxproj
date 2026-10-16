@@ -10,6 +10,12 @@
 		016CAD75300930F400B597E4 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD74300930E600B597E4 /* LocationManager.swift */; };
 		016CAD793009339400B597E4 /* MagnetometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD783009338A00B597E4 /* MagnetometerManager.swift */; };
 		016CAD7C3009368900B597E4 /* BarometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD7B3009368400B597E4 /* BarometerManager.swift */; };
+		0A0000000000000000C0DE00 /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE01 /* ActivityManager.swift */; };
+		0A0000000000000000C0DE02 /* PedometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE03 /* PedometerManager.swift */; };
+		0A0000000000000000C0DE04 /* VisitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE05 /* VisitManager.swift */; };
+		0A0000000000000000C0DE06 /* EnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE07 /* EnvironmentManager.swift */; };
+		0A0000000000000000C0DE08 /* CrowdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE09 /* CrowdManager.swift */; };
+		0A0000000000000000C0DE0A /* HeadphoneMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000000000000000C0DE0B /* HeadphoneMotionManager.swift */; };
 		016CAD803009376000B597E4 /* ProximityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD7F3009375D00B597E4 /* ProximityManager.swift */; };
 		016CAD83300937CC00B597E4 /* BatteryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD82300937C200B597E4 /* BatteryManager.swift */; };
 		016CAD853009389600B597E4 /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016CAD843009389300B597E4 /* OrientationManager.swift */; };
@@ -29,6 +35,12 @@
 		016CAD74300930E600B597E4 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		016CAD783009338A00B597E4 /* MagnetometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerManager.swift; sourceTree = "<group>"; };
 		016CAD7B3009368400B597E4 /* BarometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarometerManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE01 /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE03 /* PedometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PedometerManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE05 /* VisitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE07 /* EnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE09 /* CrowdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrowdManager.swift; sourceTree = "<group>"; };
+		0A0000000000000000C0DE0B /* HeadphoneMotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadphoneMotionManager.swift; sourceTree = "<group>"; };
 		016CAD7F3009375D00B597E4 /* ProximityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityManager.swift; sourceTree = "<group>"; };
 		016CAD82300937C200B597E4 /* BatteryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryManager.swift; sourceTree = "<group>"; };
 		016CAD843009389300B597E4 /* OrientationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
@@ -114,6 +126,12 @@
 				019EB6722FFE9C6C00F3FC86 /* SensorHub.swift */,
 				016CAD74300930E600B597E4 /* LocationManager.swift */,
 				016CAD7B3009368400B597E4 /* BarometerManager.swift */,
+				0A0000000000000000C0DE01 /* ActivityManager.swift */,
+				0A0000000000000000C0DE03 /* PedometerManager.swift */,
+				0A0000000000000000C0DE05 /* VisitManager.swift */,
+				0A0000000000000000C0DE07 /* EnvironmentManager.swift */,
+				0A0000000000000000C0DE09 /* CrowdManager.swift */,
+				0A0000000000000000C0DE0B /* HeadphoneMotionManager.swift */,
 				016CAD7F3009375D00B597E4 /* ProximityManager.swift */,
 				016CAD82300937C200B597E4 /* BatteryManager.swift */,
 				016CAD843009389300B597E4 /* OrientationManager.swift */,
@@ -233,6 +251,12 @@
 				016CAD89300939D300B597E4 /* VolumeManager.swift in Sources */,
 				016CAD83300937CC00B597E4 /* BatteryManager.swift in Sources */,
 				016CAD7C3009368900B597E4 /* BarometerManager.swift in Sources */,
+				0A0000000000000000C0DE00 /* ActivityManager.swift in Sources */,
+				0A0000000000000000C0DE02 /* PedometerManager.swift in Sources */,
+				0A0000000000000000C0DE04 /* VisitManager.swift in Sources */,
+				0A0000000000000000C0DE06 /* EnvironmentManager.swift in Sources */,
+				0A0000000000000000C0DE08 /* CrowdManager.swift in Sources */,
+				0A0000000000000000C0DE0A /* HeadphoneMotionManager.swift in Sources */,
 				016CAD873009397F00B597E4 /* BrightnessManager.swift in Sources */,
 				016CAD8F30093E9D00B597E4 /* DeviceState.swift in Sources */,
 				016CAD803009376000B597E4 /* ProximityManager.swift in Sources */,

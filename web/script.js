@@ -23,10 +23,12 @@ const SERVIDOR = "";
 //
 const ARQUIVO = "";
 
-// Qual performance a página repete quando não há ninguém sendo seguido.
-// Vazio = a mais recente. Preenchido = sempre esta, ignorando os testes
-// que vierem depois.
-const SESSAO = "2026-08-10_22h19m35s";
+// Qual performance a página abre quando não há ninguém sendo seguido.
+// Vazio = a mais recente com conteúdo. Preencher com um id trava numa só.
+const SESSAO = "";
+
+// Abaixo disto é teste, não performance: não entra no índice nem é tocado.
+const MINIMO_VERSOS = 10;
 
 // Fuso da performance, em horas. O servidor roda em UTC, mas o registro
 // tem que mostrar sempre a hora do lugar onde aconteceu — senão quem lê
@@ -390,6 +392,76 @@ function desenhar(limpo, trechoEn, epoch, animar) {
     }
 }
 
+
+// ------------------------------------------------------------- índice
+
+// Todas as performances que valem como obra, da mais recente para trás.
+let performances = [];
+let tocando = null;
+
+const escolha = document.getElementById("escolha");
+
+const MESES_CURTOS = {
+    pt: ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],
+    en: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+};
+
+function rotuloCurto(iso) {
+    const d = noFuso(iso);
+    return `${d.getUTCDate()} ${MESES_CURTOS[lingua][d.getUTCMonth()]}`;
+}
+
+async function carregarIndice() {
+
+    try {
+        const r = await fetch(base("/registro"));
+        const d = await r.json();
+        performances = (d.performances || [])
+            .filter(p => (p.linhas || 0) >= MINIMO_VERSOS);
+    } catch {
+        performances = [];
+    }
+
+    return performances;
+}
+
+function desenharEscolha() {
+
+    if (!escolha) return;
+
+    if (performances.length < 2) {
+        escolha.style.display = "none";
+        return;
+    }
+
+    escolha.textContent = "";
+    escolha.style.display = "block";
+
+    performances.forEach((p, i) => {
+
+        if (i > 0) {
+            const sep = document.createElement("span");
+            sep.className = "separa";
+            sep.textContent = "·";
+            escolha.appendChild(sep);
+        }
+
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "dia" + (p.id === tocando ? " ativa" : "");
+        b.textContent = rotuloCurto(p.inicio);
+        b.dataset.id = p.id;
+
+        b.addEventListener("click", () => {
+            if (p.id === tocando) return;
+            pararRepeticao();
+            tocarRegistro(p.id);
+        });
+
+        escolha.appendChild(b);
+    });
+}
+
 // ------------------------------------------------------------- registro
 
 function anunciar(html) {
@@ -428,13 +500,20 @@ function pararRepeticao() {
     }
 }
 
-async function tocarRegistro() {
+async function tocarRegistro(qual) {
 
     let gravacao;
 
+    if (!performances.length) await carregarIndice();
+
+    // Sem escolha explícita: a travada, ou a mais recente de verdade.
+    const alvo = qual || SESSAO
+        || (performances[0] && performances[0].id)
+        || null;
+
     const endereco = ARQUIVO
         ? ARQUIVO
-        : base(SESSAO ? `/registro/${SESSAO}` : "/registro/ultima");
+        : base(alvo ? `/registro/${alvo}` : "/registro/ultima");
 
     try {
         const r = await fetch(endereco);
@@ -461,7 +540,9 @@ async function tocarRegistro() {
     const linhas = gravacao.linhas;
 
     sessaoAtual = sessao;
+    tocando = sessao.id;
     escreverLegenda();
+    desenharEscolha();
 
     let i = 0;
 
@@ -510,6 +591,8 @@ function entrarAoVivo() {
     pararRepeticao();
     limpar();
     sessaoAtual = null;
+    tocando = null;
+    if (escolha) escolha.style.display = "none";
     anunciar("");
 }
 
@@ -723,6 +806,7 @@ function aplicarLingua() {
     if (ultimoEstado) pintarSensores(ultimoEstado, true);
 
     escreverLegenda();
+    desenharEscolha();
     redesenharVersos();
 }
 

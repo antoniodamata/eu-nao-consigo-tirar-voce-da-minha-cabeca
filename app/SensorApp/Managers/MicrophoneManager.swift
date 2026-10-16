@@ -12,7 +12,7 @@ final class MicrophoneManager: ObservableObject {
 
     static let shared = MicrophoneManager()
 
-    /// Potência média em dB, como antes.
+    /// Potência média em dB.
     @Published var level: Float = 0
 
     /// Fração da energia que está na faixa da voz humana, de 0 a 1.
@@ -24,15 +24,25 @@ final class MicrophoneManager: ObservableObject {
     private let engine = AVAudioEngine()
 
     private let tamanho = 2048
+    private let metade = 1024
+
     private var fft: vDSP.FFT<DSPSplitComplex>?
+
+    // Buffers pré-alocados: o tap dispara muitas vezes por segundo e alocar
+    // arrays a cada chamada seria desperdício dentro de callback de áudio.
     private var janela: [Float] = []
+    private var amostras: [Float] = []
+    private var janelado: [Float] = []
+    private var realEntrada: [Float] = []
+    private var imagEntrada: [Float] = []
+    private var realSaida: [Float] = []
+    private var imagSaida: [Float] = []
+    private var magnitudes: [Float] = []
 
     // Faixa aproximada da fala humana.
     private let vozMin: Float = 300
     private let vozMax: Float = 3400
 
-    // A partir de que fração da energia consideramos que há fala, e quão
-    // alto ela precisa estar para não ser eco do próprio ambiente.
     private let limiarRazao: Float = 0.45
     private let limiarNivel: Float = -42
 
@@ -40,7 +50,8 @@ final class MicrophoneManager: ObservableObject {
 
         let sessao = AVAudioSession.sharedInstance()
 
-        try? sessao.setCategory(.playAndRecord, options: [.defaultToSpeaker, .mixWithOthers])
+        try? sessao.setCategory(.playAndRecord,
+                                options: [.defaultToSpeaker, .mixWithOthers])
         try? sessao.setActive(true)
 
         let log2n = vDSP_Length(log2(Float(tamanho)))
@@ -51,8 +62,21 @@ final class MicrophoneManager: ObservableObject {
                              count: tamanho,
                              isHalfWindow: false)
 
+        amostras    = [Float](repeating: 0, count: tamanho)
+        janelado    = [Float](repeating: 0, count: tamanho)
+        realEntrada = [Float](repeating: 0, count: metade)
+        imagEntrada = [Float](repeating: 0, count: metade)
+        realSaida   = [Float](repeating: 0, count: metade)
+        imagSaida   = [Float](repeating: 0, count: metade)
+        magnitudes  = [Float](repeating: 0, count: metade)
+
         let entrada = engine.inputNode
         let formato = entrada.outputFormat(forBus: 0)
+
+        guard formato.sampleRate > 0 else {
+            print("Microfone sem formato válido.")
+            return
+        }
 
         entrada.installTap(onBus: 0,
                            bufferSize: AVAudioFrameCount(tamanho),
@@ -71,40 +95,57 @@ final class MicrophoneManager: ObservableObject {
 
     private func analisar(_ buffer: AVAudioPCMBuffer, taxa: Float) {
 
-        guard let canal = buffer.floatChannelData?[0] else { return }
+        guard let canal = buffer.floatChannelData?[0], let fft = fft else { return }
 
-        let n = min(Int(buffer.frameLength), tamanho)
+        // O AVAudioEngine trata bufferSize como sugestão e costuma entregar
+        // outro tamanho. Em vez de recusar, pegamos o que couber e
+        // completamos com zeros — recusar faria o detector nunca rodar.
+        let disponivel = min(Int(buffer.frameLength), tamanho)
 
-        guard n == tamanho, let fft = fft else { return }
+        guard disponivel > 0 else { return }
 
-        var amostras = [Float](repeating: 0, count: tamanho)
-        for i in 0..<tamanho { amostras[i] = canal[i] }
+        for i in 0..<disponivel { amostras[i] = canal[i] }
+        if disponivel < tamanho {
+            for i in disponivel..<tamanho { amostras[i] = 0 }
+        }
 
-        // Nível, em dB, do mesmo jeito que antes.
+        // Nível em dB, sobre as amostras cruas.
         var quadratico: Float = 0
-        vDSP_measqv(amostras, 1, &quadratico, vDSP_Length(tamanho))
+        vDSP_measqv(amostras, 1, &quadratico, vDSP_Length(disponivel))
         let db = 10 * log10f(max(quadratico, 1e-12))
 
-        // Janela de Hanning antes da transformada, senão as bordas do
-        // buffer viram frequência que não existe.
-        vDSP.multiply(amostras, janela, result: &amostras)
+        // Janela de Hanning antes da transformada, senão as bordas do buffer
+        // viram frequência que não existe. Saída em array separado: o vDSP
+        // não garante nada quando entrada e saída são o mesmo buffer.
+        vDSP.multiply(amostras, janela, result: &janelado)
 
-        var real = [Float](repeating: 0, count: tamanho / 2)
-        var imag = [Float](repeating: 0, count: tamanho / 2)
-        var magnitudes = [Float](repeating: 0, count: tamanho / 2)
+        var razao: Float = 0
 
-        real.withUnsafeMutableBufferPointer { r in
-            imag.withUnsafeMutableBufferPointer { i in
+        janelado.withUnsafeBufferPointer { entradaBruta in
 
-                var saida = DSPSplitComplex(realp: r.baseAddress!, imagp: i.baseAddress!)
+            entradaBruta.baseAddress!.withMemoryRebound(
+                to: DSPComplex.self, capacity: metade
+            ) { complexos in
 
-                amostras.withUnsafeBytes { bruto in
-                    let complexos = bruto.bindMemory(to: DSPComplex.self)
-                    vDSP_ctoz(complexos.baseAddress!, 2, &saida, 1, vDSP_Length(tamanho / 2))
-                }
+                realEntrada.withUnsafeMutableBufferPointer { re in
+                imagEntrada.withUnsafeMutableBufferPointer { ie in
+                realSaida.withUnsafeMutableBufferPointer { rs in
+                imagSaida.withUnsafeMutableBufferPointer { ims in
 
-                fft.forward(input: saida, output: &saida)
-                vDSP.absolute(saida, result: &magnitudes)
+                    var entradaSplit = DSPSplitComplex(
+                        realp: re.baseAddress!, imagp: ie.baseAddress!
+                    )
+                    var saidaSplit = DSPSplitComplex(
+                        realp: rs.baseAddress!, imagp: ims.baseAddress!
+                    )
+
+                    vDSP_ctoz(complexos, 2, &entradaSplit, 1, vDSP_Length(metade))
+
+                    // Entrada e saída distintas, de propósito.
+                    fft.forward(input: entradaSplit, output: &saidaSplit)
+
+                    vDSP.absolute(saidaSplit, result: &magnitudes)
+                }}}}
             }
         }
 
@@ -114,7 +155,7 @@ final class MicrophoneManager: ObservableObject {
         var energiaVoz: Float = 0
         var energiaTotal: Float = 0
 
-        for k in 1..<magnitudes.count {
+        for k in 1..<metade {
 
             let freq = Float(k) * resolucao
             let e = magnitudes[k] * magnitudes[k]
@@ -126,7 +167,8 @@ final class MicrophoneManager: ObservableObject {
             }
         }
 
-        let razao = energiaTotal > 0 ? energiaVoz / energiaTotal : 0
+        razao = energiaTotal > 0 ? energiaVoz / energiaTotal : 0
+
         let temFala = razao > limiarRazao && db > limiarNivel
 
         DispatchQueue.main.async {
